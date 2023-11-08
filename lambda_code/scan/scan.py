@@ -232,7 +232,7 @@ def cname_s3(account_name, record_sets):
         if r["Type"] in ["CNAME"]
         and "ResourceRecords" in r
         and "amazonaws.com" in r["ResourceRecords"][0]["Value"]
-        and ".s3-website" in r["ResourceRecords"][0]["Value"]
+        and (".s3-website" in r["ResourceRecords"][0]["Value"] or ".s3" in r["ResourceRecords"][0]["Value"])
     ]
 
     for record in record_sets_filtered:
