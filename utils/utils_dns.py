@@ -55,8 +55,11 @@ def vulnerable_cname(domain_name, update_scan=False):
             myresolver.resolve(domain_name, "CNAME")
             return True
 
-        except (resolver.NXDOMAIN, resolver.NoNameservers):
+        except (resolver.NoNameservers):
             return False
+
+        except (resolver.NXDOMAIN):
+            return True
 
     except (resolver.NoAnswer, resolver.NoNameservers):
         return False
