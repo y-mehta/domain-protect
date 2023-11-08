@@ -14,6 +14,9 @@ def vulnerable_storage(domain_name, https=True, http=True, https_timeout=1, http
             if "NoSuchBucket" in response.text:
                 return True
 
+            if "NotFound" in response.text:
+                return True
+
             if "Amazon CloudFront distribution is configured to block access from your country" in response.text:
                 logging.error(
                     "Amazon CloudFront distribution for %s configured to block access from your country",
@@ -32,6 +35,9 @@ def vulnerable_storage(domain_name, https=True, http=True, https_timeout=1, http
         try:
             response = requests.get("http://" + domain_name, timeout=http_timeout)
             if "NoSuchBucket" in response.text:
+                return True
+
+            if "NotFound" in response.text:
                 return True
 
             if "Amazon CloudFront distribution is configured to block access from your country" in response.text:
