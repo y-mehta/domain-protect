@@ -106,9 +106,17 @@ def dns_deleted(domain_name, record_type="A"):
     try:
         myresolver.resolve(domain_name, record_type)
 
-    except (resolver.NoAnswer, resolver.NXDOMAIN):
+    except (resolver.NoAnswer):
         print(f"DNS {record_type} record for {domain_name} no longer found")
         return True
+
+    except (resolver.NXDOMAIN):
+        print(f"DNS {record_type} record for {domain_name} returned NXDOMAIN")
+        if record_type == "CNAME":
+            print(f"DNS {record_type} record for {domain_name} is CNAME record, bail out.")
+            return False
+        else:
+            return True
 
     except (resolver.NoNameservers, resolver.NoResolverConfiguration, resolver.Timeout):
         return False
