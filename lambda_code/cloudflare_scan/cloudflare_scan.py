@@ -192,7 +192,7 @@ def cf_eb(account_name, zone_name, records):
 
         print(f"testing {domain} in {account_name} DNS zone {zone_name}")
 
-        result = vulnerable_cname(domain)
+        result = vulnerable_cname(value)
 
         if result:
             print(f"VULNERABLE CNAME {domain} pointing to missing Elastic Beanstalk environment {value}")
