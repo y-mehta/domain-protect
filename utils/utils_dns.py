@@ -104,7 +104,7 @@ def dns_deleted(domain_name, record_type="A"):
     # DNS record type examples: A, CNAME, MX, NS
     
     try:
-        print(f"Resolving DNS {record_type} record for {domain}")
+        print(f"Resolving DNS {record_type} record for {domain_name}")
         myresolver.resolve(domain_name, record_type)
 
     except (resolver.NoAnswer):
@@ -120,7 +120,7 @@ def dns_deleted(domain_name, record_type="A"):
             return True
 
     except (resolver.NoNameservers, resolver.NoResolverConfiguration, resolver.Timeout):
-        print(f"NoNameservers/NoResolverConfiguration/Timeout DNS {record_type} record for {domain}")
+        print(f"NoNameservers/NoResolverConfiguration/Timeout DNS {record_type} record for {domain_name}")
         return False
 
     return False
