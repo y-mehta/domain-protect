@@ -2,8 +2,8 @@ import sys
 
 from dns import resolver
 
-# Google public DNS servers
-nameservers = ["8.8.8.8", "8.8.4.4"]
+# Cloudflare public DNS servers
+nameservers = ["1.1.1.1", "1.0.0.1"]
 myresolver = resolver.Resolver()
 myresolver.nameservers = nameservers
 
@@ -102,8 +102,9 @@ def vulnerable_alias(domain_name, update_scan=False):
 
 def dns_deleted(domain_name, record_type="A"):
     # DNS record type examples: A, CNAME, MX, NS
-
+    
     try:
+        print(f"Resolving DNS {record_type} record for {domain}")
         myresolver.resolve(domain_name, record_type)
 
     except (resolver.NoAnswer):
@@ -119,9 +120,11 @@ def dns_deleted(domain_name, record_type="A"):
             return True
 
     except (resolver.NoNameservers, resolver.NoResolverConfiguration, resolver.Timeout):
+        print(f"NoNameservers/NoResolverConfiguration/Timeout DNS {record_type} record for {domain}")
         return False
 
     return False
+
 
 
 def updated_a_record(domain_name, ip_address):
