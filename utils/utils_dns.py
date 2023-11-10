@@ -47,25 +47,31 @@ def vulnerable_ns(domain_name, update_scan=False):
 def vulnerable_cname(domain_name, update_scan=False):
 
     try:
+        print(f"Resolving DNS record for {domain_name}")
         myresolver.resolve(domain_name, "A")
         return False
 
     except resolver.NXDOMAIN:
         try:
+            print(f"Resolving DNS record for {domain_name}")
             myresolver.resolve(domain_name, "CNAME")
             return True
 
         except (resolver.NoNameservers):
+            print(f"Resolving DNS record for {domain_name} - Returned NoNameServers")
             return False
 
         except (resolver.NXDOMAIN):
+            print(f"Resolving DNS record for {domain_name} - Returned NXDOMAIN for CNAME Record")
             return True
 
     except (resolver.NoAnswer, resolver.NoNameservers):
+        print(f"Resolving DNS record for {domain_name} - Returned NoAnswer / NoNameServers")
         return False
 
     except (resolver.Timeout):
         if update_scan:
+            print(f"Resolving DNS record for {domain_name} - Returned Timeout final bailout")
             return True
 
         return False
