@@ -49,16 +49,22 @@ def vulnerable_cname(domain_name, update_scan=False):
     try:
         print(f"Resolving DNS record for {domain_name}")
         myresolver.resolve(domain_name, "A")
+        if update_scan:
+            return True
         return False
 
     except resolver.NXDOMAIN:
         try:
             print(f"Resolving DNS record for {domain_name}")
             myresolver.resolve(domain_name, "CNAME")
+            if update_scan:
+                return False
             return True
 
         except (resolver.NoNameservers):
             print(f"Resolving DNS record for {domain_name} - Returned NoNameServers")
+            if update_scan:
+                return True
             return False
 
         except (resolver.NXDOMAIN):
