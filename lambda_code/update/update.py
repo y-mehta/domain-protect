@@ -47,8 +47,8 @@ def is_fixed(predicates, vulnerability_type, domain, resource_type, ip_prefixes)
     for predicate in predicates:
         if predicate(vulnerability_type, domain, resource_type, ip_prefixes):
             if vulnerability_type == "CNAME":
-                print(vulnerable_cname(d, True))
-                print(dns_deleted(d,"CNAME"))
+                print(vulnerable_cname(domain, True))
+                print(dns_deleted(domain,"CNAME"))
             print(f"{predicate} - {vulnerability_type} , {domain}, {resource_type}")
             return True
 
