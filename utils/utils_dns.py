@@ -63,6 +63,8 @@ def vulnerable_cname(domain_name, update_scan=False):
 
         except (resolver.NXDOMAIN):
             print(f"Resolving DNS record for {domain_name} - Returned NXDOMAIN for CNAME Record")
+            if update_scan:
+                return False
             return True
 
     except (resolver.NoAnswer, resolver.NoNameservers):
