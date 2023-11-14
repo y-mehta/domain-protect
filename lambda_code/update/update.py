@@ -35,21 +35,21 @@ def get_fixed_predicates():
 
     return [
         lambda v, d, r, i: v == "NS" and (dns_deleted(d, "NS") or not vulnerable_ns(d, True)),
-        lambda v, d, r, i: v == "CNAME"
-        and ("S3" in r or "Google cloud storage" in r)
-        and (dns_deleted(d, "CNAME") or not vulnerable_storage(d, https_timeout=3, http_timeout=3)),
-        lambda v, d, r, i: ("S3" in r or "Google cloud storage" in r)
-        and (dns_deleted(d) or not vulnerable_storage(d, https_timeout=3, http_timeout=3)),
+        lambda v, d, r, i: v == "CNAME" and ("S3" in r or "Google cloud storage" in r) and (dns_deleted(d, "CNAME") or not vulnerable_storage(d, https_timeout=3, http_timeout=3)),
+        lambda v, d, r, i: ("S3" in r or "Google cloud storage" in r) and (dns_deleted(d) or not vulnerable_storage(d, https_timeout=3, http_timeout=3)),
         lambda v, d, r, i: v == "CNAME" and (dns_deleted(d, "CNAME") or not vulnerable_cname(d, True)),
         lambda v, d, r, i: v == "Alias" and (dns_deleted(d) or not vulnerable_alias(d, True)),
-        lambda v, d, r, i: v == "A"
-        and (dns_deleted(d) or not vulnerable_aws_a_record(i, updated_a_record(d, r), ip_time_limit)),
+        lambda v, d, r, i: v == "A" and (dns_deleted(d) or not vulnerable_aws_a_record(i, updated_a_record(d, r), ip_time_limit)),
     ]
 
 
 def is_fixed(predicates, vulnerability_type, domain, resource_type, ip_prefixes):
     for predicate in predicates:
         if predicate(vulnerability_type, domain, resource_type, ip_prefixes):
+            if vulnerability_type == "CNAME":
+                print(vulnerable_cname(d, True))
+                print(dns_deleted(d,"CNAME"))
+            print(f"{predicate} - {vulnerability_type} , {domain}, {resource_type}")
             return True
 
     return False
@@ -58,6 +58,7 @@ def is_fixed(predicates, vulnerability_type, domain, resource_type, ip_prefixes)
 def lambda_handler(event, context):  # pylint:disable=unused-argument
 
     predicates = get_fixed_predicates()
+    print(f"{predicates}")
     vulnerabilities = db_list_all_unfixed_vulnerabilities()
     json_data = {"Fixed": []}
     prefixes = get_all_aws_ips()
