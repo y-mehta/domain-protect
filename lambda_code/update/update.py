@@ -46,10 +46,6 @@ def get_fixed_predicates():
 def is_fixed(predicates, vulnerability_type, domain, resource_type, ip_prefixes):
     for predicate in predicates:
         if predicate(vulnerability_type, domain, resource_type, ip_prefixes):
-            if vulnerability_type == "CNAME":
-                print(vulnerable_cname(domain, True))
-                print(dns_deleted(domain,"CNAME"))
-            print(f"{predicate} - {vulnerability_type} , {domain}, {resource_type}")
             return True
 
     return False
@@ -58,7 +54,6 @@ def is_fixed(predicates, vulnerability_type, domain, resource_type, ip_prefixes)
 def lambda_handler(event, context):  # pylint:disable=unused-argument
 
     predicates = get_fixed_predicates()
-    print(f"{predicates}")
     vulnerabilities = db_list_all_unfixed_vulnerabilities()
     json_data = {"Fixed": []}
     prefixes = get_all_aws_ips()
