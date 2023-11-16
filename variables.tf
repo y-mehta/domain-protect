@@ -223,3 +223,8 @@ variable "permissions_boundary_arn" {
   description = "permissions boundary ARN to attach to every IAM role"
   default     = ""
 }
+
+variable "ssl_certificate_arn" {
+  description = "ARN of SSL certificate for ElasticBeanstalk to be used for HTTPS requests"
+  default     = ""
+}
