@@ -50,6 +50,7 @@ resource "aws_lambda_function" "lambda" {
       SNS_TOPIC_ARN       = var.sns_topic_arn
       SUFFIX              = random_string.suffix.result
       TERRAFORM_WORKSPACE = local.env
+      SSL_CERTIFICATE_ARN = var.ssl_certificate_arn
     }
   }
 
