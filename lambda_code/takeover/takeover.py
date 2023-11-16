@@ -277,7 +277,9 @@ def eb_takeover(target, vulnerable_domain, account):
     region = target.rsplit(".")[-3]
     print(f"Creating Elastic Beanstalk instance with domain name {target} in {region} region")
     bucket_name = create_stack_eb_content(region, "eb-content.yaml", vulnerable_domain, account)
-    s3_upload_eb_content("eb-content", bucket_name, region)
+    if(bucket_name is not None):
+        s3_upload_eb_content("eb-content", bucket_name, region)
+    
     if create_stack(region, "eb-vpc.yaml", target, vulnerable_domain, account):
         if bucket_name is not None:
             s3_delete_eb_content(bucket_name, region)
@@ -338,6 +340,8 @@ def takeover_successful(domain_name):
     try:
         response = requests.get("https://" + domain_name, timeout=requests_timeout())
         if "Domain Protect" in response.text:
+            return True
+        if "Invalid SSL certificate" in response.text:
             return True
 
     except (
@@ -411,7 +415,7 @@ def lambda_handler(event, context):  # pylint:disable=unused-argument
 
                 takeover_domains.append(finding["Domain"])
 
-            elif ".elasticbeanstalk.com" in finding["Takeover"]:
+            elif ".elasticbeanstalk.com" in finding["Takeover"] and ".eba-" not in finding["Takeover"]:
                 resource_type = "Elastic Beanstalk instance"
 
                 if eb_takeover(finding["Takeover"], finding["Domain"], finding["Account"]):
