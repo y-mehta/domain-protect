@@ -13,6 +13,7 @@ from utils.utils_globalvars import requests_timeout
 project = os.environ["PROJECT"]
 sns_topic_arn = os.environ["SNS_TOPIC_ARN"]
 suffix = os.environ["SUFFIX"]
+ssl_certificate_arn = os.environ["SSL_CERTIFICATE_ARN"]
 
 
 def random_string(length):  # nosec - not for cryptographic purposes
@@ -49,6 +50,7 @@ def create_stack(region, template, takeover_domain, vulnerable_domain, account):
             {"ParameterKey": "BucketName", "ParameterValue": f"{project}-{sanitised_domain}-content-{suffix}"[:63]},
             {"ParameterKey": "EnvironmentName", "ParameterValue": project},
             {"ParameterKey": "SolutionStackName", "ParameterValue": get_elastic_beanstalk_stack()},
+            {"ParameterKey": "SSLCertificateArn", "ParameterValue":ssl_certificate_arn},
         ]
         resource_name = stack_name
 
@@ -76,7 +78,7 @@ def create_stack(region, template, takeover_domain, vulnerable_domain, account):
                     {"Key": "ResourceType", "Value": resource_type},
                     {"Key": "TakeoverAccount", "Value": get_account_name()},
                     {"Key": "VulnerableAccount", "Value": account},
-                    {"Key": "VulnerableDomain", "Value": vulnerable_domain},
+                    {"Key": "VulnerableDomain", "Value": vulnerable_domain}
                 ],
             )
 

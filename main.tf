@@ -109,6 +109,7 @@ module "lambda-takeover" {
   kms_arn           = module.kms.kms_arn
   sns_topic_arn     = module.sns.sns_topic_arn
   dlq_sns_topic_arn = module.sns-dead-letter-queue.sns_topic_arn
+  ssl_certificate_arn = var.ssl_certificate_arn
 }
 
 module "takeover-role" {
