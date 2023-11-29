@@ -55,6 +55,37 @@ def vulnerable_storage(domain_name, https=True, http=True, https_timeout=1, http
 
     return False
 
+def vulnerable_fingerprints(domain_name, https=True, http=True, https_timeout=1, http_timeout=1):
+
+    if https:
+        try:
+            response = requests.get("https://" + domain_name, timeout=https_timeout)
+            if "There isn't a Github Pages site here." in response.text:
+                return True
+
+        except (
+            requests.exceptions.SSLError,
+            requests.exceptions.ConnectionError,
+            requests.exceptions.ReadTimeout,
+            requests.exceptions.TooManyRedirects,
+        ) as e:
+            logging.error("%s for HTTPS request to %s", e, domain_name)
+
+    if http:
+        try:
+            response = requests.get("http://" + domain_name, timeout=http_timeout)
+            if "There isn't a Github Pages site here." in response.text:
+                return True
+
+        except (
+            requests.exceptions.ConnectionError,
+            requests.exceptions.ReadTimeout,
+            requests.exceptions.TooManyRedirects,
+        ) as e:
+            logging.error("%s for HTTP request to %s", e, domain_name)
+
+    return False
+
 
 def get_bucket_name(domain_name, https=True, http=True, https_timeout=1, http_timeout=1):
 
