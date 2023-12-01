@@ -16,6 +16,7 @@ from utils.utils_dns import vulnerable_cname
 from utils.utils_dns import vulnerable_ns
 from utils.utils_hackerone import hackerone_create_report
 from utils.utils_requests import vulnerable_storage
+from utils.utils_requests import vulnerable_fingerprints
 from utils.utils_sanitise import filtered_ns_records
 from utils.utils_sanitise import restore_wildcard
 from utils.utils_sanitise import sanitise_wildcards
