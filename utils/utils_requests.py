@@ -60,7 +60,7 @@ def vulnerable_fingerprints(domain_name, https=True, http=True, https_timeout=1,
     if https:
         try:
             response = requests.get("https://" + domain_name, timeout=https_timeout)
-            if "There isn't a Github Pages site here." in response.text:
+            if "There isn't a GitHub Pages site here." in response.text:
                 return True
 
         except (
@@ -74,7 +74,7 @@ def vulnerable_fingerprints(domain_name, https=True, http=True, https_timeout=1,
     if http:
         try:
             response = requests.get("http://" + domain_name, timeout=http_timeout)
-            if "There isn't a Github Pages site here." in response.text:
+            if "There isn't a GitHub Pages site here." in response.text:
                 return True
 
         except (
