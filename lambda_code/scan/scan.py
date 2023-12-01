@@ -186,7 +186,7 @@ def cname_github(account_name, record_sets):
     for record in record_sets_filtered:
         domain = record["Name"]
         print(f"checking if {domain} is vulnerable to takeover")
-        result = vulnerable_fingerprints(domain)
+        result = vulnerable_fingerprints(domain,https=False)
         if result:
             process_vulnerability(domain, account_name, "GitHub", "CNAME")
 
