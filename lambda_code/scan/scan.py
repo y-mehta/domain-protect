@@ -170,6 +170,25 @@ def cname_azure(account_name, record_sets):
         if result:
             process_vulnerability(domain, account_name, "Azure", "CNAME")
 
+def cname_github(account_name, record_sets):
+
+    vulnerability_list = [".github.io"]
+
+    record_sets_filtered = [
+        r
+        for r in record_sets
+        if r["Type"] in ["CNAME"]
+        and "ResourceRecords" in r
+        and any(vulnerability in r["ResourceRecords"][0]["Value"] for vulnerability in vulnerability_list)
+    ]
+
+    for record in record_sets_filtered:
+        domain = record["Name"]
+        print(f"checking if {domain} is vulnerable to takeover")
+        result = vulnerable_fingerprints(domain)
+        if result:
+            process_vulnerability(domain, account_name, "GitHub", "CNAME")
+
 
 def cname_cloudfront_s3(account_name, record_sets, account_id):
 
@@ -301,6 +320,7 @@ def lambda_handler(event, context):  # pylint:disable=unused-argument
         cname_eb(account_name, record_sets)
         cname_google(account_name, record_sets)
         cname_s3(account_name, record_sets)
+        cname_github(account_name, record_sets)
         ns_subdomain(account_name, hosted_zone, record_sets)
 
     if len(hosted_zones) == 0:
